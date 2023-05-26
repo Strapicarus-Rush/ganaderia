@@ -1,0 +1,53 @@
+# syntax=docker/dockerfile:1
+
+#  docker run -p 49160:ENV SRVPORT=8095 -d <your username>/node-web-app
+
+#################################
+#                               #
+#          USER MSS             #
+#                               #
+#################################
+
+# Start your image with a node base image
+FROM node:18-alpine
+
+# Create an application directory
+RUN mkdir -p /app
+
+# Set the /app directory as the working directory for any command that follows
+WORKDIR /app
+RUN mkdir -p /public
+
+# Copy the local app package and package-lock.json file to the container
+COPY ./package*.json ./
+
+# Copy local directories to the working directory of our docker image (/app)
+COPY ./app ./app
+COPY ./public ./public
+COPY ./server.js ./server.js
+
+# Install node packages, install serve, build the app, and remove dependencies at the end
+RUN npm install --production
+    # && npm install -g serve \
+    # && npm run build \
+    # && rm -fr node_modules
+
+# Specify that the application in the container listens on port ENV SRVPORT=8095
+EXPOSE 8095
+
+# Enable prod env for better performance
+
+ENV JWTSECRET=midffgpDFDF.ggficvxjk
+ENV DEVMODE=true
+ENV SALTROUND=10
+ENV DBNAME=ganaderia
+ENV DBUSR=root
+ENV DBPSS=123
+ENV SRVPORT=8095
+ENV INDEX=/app/public/index.html
+ENV PUBLIC=/app/public
+ENV NODE_ENV=production
+ENV DBHOST=host.docker.internal
+
+# Start the app using serve command
+CMD [ "node", "server.js", "--prod" ]

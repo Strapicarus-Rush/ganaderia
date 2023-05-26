@@ -1,0 +1,35 @@
+# syntax=docker/dockerfile:1
+
+#  docker run -p 3306:3306 -d <your username>/node-web-app
+
+#################################
+#                               #
+#      DATABASE GANADERIA       #
+#                               #
+#################################
+
+# Start your image with a mysql base image
+FROM mysql:latest
+
+# Make a directory 
+RUN mkdir -p /sql
+
+# Set the /sql directory as the working directory for any command that follows
+WORKDIR /sql
+
+# Copy SQL file into image
+
+COPY ./init.sql /sql/init.sql
+
+
+
+ENV MYSQL_ROOT_PASSWORD=123
+ENV MYSQL_ALLOW_EMPTY_PASSWORD=false
+ENV ENV MYSQL_DATABASE=ganaderia
+
+# RUN /usr/bin/mysqld_safe &
+# CMD sleep 10 && mysql -u root < /docker-entrypoint-initdb.d/init.sql
+EXPOSE 3360
+
+# RUN ["docker-entrypoint.sh", "mysqld", "--init-file=/docker-entrypoint-initdb.d/init.sql"]
+

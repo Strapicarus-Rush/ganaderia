@@ -1,0 +1,109 @@
+
+
+IP:  172.18.0.2
+PORT:  "3306/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "mysql"
+
+
+IP:  172.18.0.3
+PORT:  "8079/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "company"
+
+
+IP:  172.18.0.4
+PORT:  "8091/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "role"
+
+
+IP:  172.18.0.5
+PORT:  "8090/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "operation"
+
+
+IP:  172.18.0.6
+PORT:  "8086/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "corral"
+
+
+IP:  172.18.0.9
+PORT:  "8082/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "breed"
+
+
+IP:  172.18.0.7
+PORT:  "8084/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "category"
+
+
+IP:  172.18.0.8
+PORT:  "8093/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "troop"
+
+
+IP:  172.18.0.10
+PORT:  "8092/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "supplier"
+
+
+IP:  172.18.0.12
+PORT:  "8088/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "animal"
+
+
+IP:  172.18.0.11
+PORT:  "8087/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "grassland"
+
+
+IP:  172.18.0.13
+PORT:  "8093/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "troop_location"
+
+
+IP:  172.18.0.14
+PORT:  "8091/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "labor"
+
+
+IP:  172.18.0.17
+PORT:  "8089/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "animal_location"
+
+
+IP:  172.18.0.16
+PORT:  "8092/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "troop_animal"
+
+
+IP:  172.18.0.18
+PORT:  "8090/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "grazing"
+
+
+IP:  172.18.0.19
+PORT:  "8095/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "breteado"
+
+
+IP:  172.18.0.15
+PORT:  "8094/tcp":
+PROJ:  "com.docker.compose.project": "ganaderia-mss"
+SERV:  "com.docker.compose.service": "weight"
+Done...

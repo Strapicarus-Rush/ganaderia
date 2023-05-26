@@ -1,0 +1,189 @@
+module.exports = function (Animal, router, Sequelize, dbConnection, Dictionary, authorizationCheck) {
+
+    //START LIST ANIMALS
+    router.route('/list/:id_company')
+
+        .get(authorizationCheck, async (req, res) => { // GET
+            try {
+                const company = parseInt(req.body.company);
+                if (isNaN(company)) throw new Error(Dictionary.unknown_company('es'));
+                const list = Animal.findAll({
+                    where: { id_company: company }
+                })
+                return res.status(200).json({ message: '', hasErr: false, data: list })
+            } catch (err) {
+                if (process.env.devmode) return res.status(200).json({ message: err.stack || err.message || err, hasErr: true })
+                return res.status(200).json({ message: Dictionary.fail_list('es'), hasErr: true })
+            }
+        })
+
+        .post(async (req, res) => { // POST
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') });
+        })
+
+        .put(async (req, res) => { // PUT
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') });
+        })
+
+        .delete(async (req, res) => { // DELETE
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') });
+        })
+    //END LIST ANIMALS
+
+
+    //START REGISTER ANIMAL
+    router.route('/register')
+
+        .get((req, res) => { // GET
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .post(authorizationCheck, async (req, res) => { // POST
+            try {
+                const { id_company, sex, ident, id_breed, birthdate, id_category } = req.body;
+                const createdAnimal = await dbConnection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED }, async (t) => {
+                    const user = await Animal.create(
+                        {
+                            id_company: id_company,
+                            sex: sex,
+                            ident: ident,
+                            id_breed: id_breed,
+                            birthdate: birthdate,
+                            id_category: id_category,
+                            id_supplier: id_supplier,
+                            deleted: false
+                        }, { transaction: t });
+                    return user
+                })
+                if (!createdAnimal) return res.status(401).json({data:{0:0}, message: Dictionary.fail_registration('es'), hasErr: true });
+                return res.status(200).json({ message: Dictionary.success_registration('es'), data: createdAnimal });
+            } catch (error) {
+                if (process.env.devmode) return res.status(200).json({  message: error.stack || error.message, hasErr: true })
+                res.status(200).json({  message: Dictionary.fail_registration('es'), hasErr: true })
+            }
+        })
+
+        .put((req, res) => { // PUT
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .delete(async (req, res) => { // DELETE
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+    //END REGISTER ANIMAL
+
+    //START ANIMAL GET
+    router.route('/get/:id/:id_company')
+
+        .get(authorizationCheck, async (req, res) => { // GET
+            try {
+                const company = parseInt(req.body.company);
+                const id = parseInt(req.body.id);
+                if (isNaN(company)) throw new Error(Dictionary.unknown_company('es'));
+                if (isNaN(id)) throw new Error(Dictionary.unknown_identity('es'));
+                const animal = Animal.findOne({
+                    where: { id_company: company, id: id }
+                })
+                return res.status(200).json({ message: '', hasErr: false, data: animal })
+            } catch (err) {
+                if (process.env.devmode) return res.status(200).json({ message: err.stack || err.message || err, hasErr: true })
+                return res.status(200).json({ message: Dictionary.unknown_error('es'), hasErr: true })
+            }
+        })
+
+        .post(async (req, res) => { // POST
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .put((req, res) => { // PUT
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .delete(async (req, res) => { // DELETE
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+    //END ANIMAL GET
+
+    //START ANIMAL EDIT
+    router.route('/edit/:id/:id_company')
+
+        .get(async (req, res) => { // GET
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .post(async (req, res) => { // POST
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .put(authorizationCheck, async (req, res) => { // PUT
+            try {
+                const company = parseInt(req.body.company);
+                const id = parseInt(req.body.id);
+                if (isNaN(company)) throw new Error(Dictionary.unknown_company('es'));
+                if (isNaN(id)) throw new Error(Dictionary.unknown_identity('es'));
+                const edited = await dbConnection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED }, async (t) => {
+                    const animal = await Animal.update(
+                        {
+                            id_company: id_company,
+                            sex: sex,
+                            ident: ident,
+                            id_breed: id_breed,
+                            birthdate: birthdate,
+                            id_category: id_category,
+                            id_supplier: id_supplier
+                        }, { where: { id_company: company, id: id }, transaction: t });
+                    return animal
+                })
+                if (!edited) return res.status(401).json({data:{0:0}, message: Dictionary.fail_edit('es'), hasErr: true });
+                const animal = Animal.findOne({
+                    where: { id_company: company, id: id }
+                })
+                return res.status(200).json({ message: Dictionary.success_edit('es'), data: animal, hasErr: false });
+            } catch (err) {
+                if (process.env.devmode) return res.status(200).json({ message: err.stack || err.message || err, hasErr: true })
+                return res.status(200).json({ message: Dictionary.fail_edit('es'), hasErr: true })
+            }
+        })
+
+        .delete(async (req, res) => { // DELETE
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+    //END ANIMAL EDIT
+
+    //START ANIMAL DELETE
+    router.route('/delete/:id/:id_company')
+
+        .get(authorizationCheck, async (req, res) => { // GET
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .post(async (req, res) => { // POST
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .put((req, res) => { // PUT
+            res.status(401).json({data:{0:0}, message: Dictionary.not_autorized('es') })
+        })
+
+        .delete(async (req, res) => { // DELETE
+            try {
+                const company = parseInt(req.body.company);
+                const id = parseInt(req.body.id);
+                if (isNaN(company)) throw new Error(Dictionary.unknown_company('es'));
+                if (isNaN(id)) throw new Error(Dictionary.unknown_identity('es'));
+                const deletedAnimal = await dbConnection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED }, async (t) => {
+                    const animal = await Animal.update(
+                        {
+                            deleted: true
+                        }, { where: { id_company: company, id: id }, transaction: t });
+                    return animal
+                })
+                if (!deletedAnimal) return res.status(401).json({data:{0:0}, message: Dictionary.fail_deletion('es'), hasErr: true });
+                return res.status(200).json({ message: Dictionary.success_deletion('es'), data: { empty: true }, hasErr: false });
+            } catch (err) {
+                if (process.env.devmode) return res.status(200).json({ message: err.stack || err.message || err, hasErr: true })
+                return res.status(200).json({ message: Dictionary.fail_deletion('es'), hasErr: true })
+            }
+        })
+    //END ANIMAL DELETE
+}

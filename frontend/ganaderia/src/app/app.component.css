@@ -1,0 +1,103 @@
+/* Estilos globales */
+@import '~@angular/material/prebuilt-themes/purple-green.css';
+
+/* Estilos específicos para componentes */
+/* Botón */
+button.mat-raised-button,
+button.mat-flat-button {
+    color: white;
+    background-color: #007bff;
+}
+
+button.mat-raised-button:hover,
+button.mat-flat-button:hover {
+    background-color: #0056b3;
+}
+
+/* Input */
+.mat-form-field {
+    width: 100%;
+}
+
+/* Select */
+.mat-select-arrow {
+    color: #007bff;
+}
+
+/* Checkbox */
+.mat-checkbox {
+    margin-right: 8px;
+}
+
+/* Radio button */
+.mat-radio-button {
+    margin-right: 8px;
+}
+
+/* Slider */
+.mat-slider {
+    width: 100%;
+}
+
+/* Datepicker */
+.mat-datepicker-toggle {
+    color: #007bff;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-wrapper {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  header {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  header h1 {
+    font-size: 24px;
+  }
+  
+  section {
+    margin-top: 40px;
+  }
+  
+  .form-field {
+    margin-bottom: 20px;
+  }
+  
+  .button-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Estilos personalizados para el botón */
+  .mat-raised-button {
+    min-width: 200px;
+    height: 48px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+  }
+  

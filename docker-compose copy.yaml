@@ -1,0 +1,815 @@
+version: '3.9'
+
+volumes:
+    db:
+
+networks:
+  back-tier:
+    name: back-tier
+    external: true
+
+services:
+
+  company:
+    image: company:latest
+    build:
+      #build: https://github.com/mycompany/example.git#branch_or_tag:subdirectory
+      context: ./backend/company
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+    # ports:
+    #   - "8080:8080/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.company: "Company web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8079
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  role:
+    image: role:latest
+    build:
+      #build: https://github.com/myrole/example.git#branch_or_tag:subdirectory
+      context: ./backend/role
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+    # ports:
+    #   - "8080:8080/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.role: "role web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8080
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+      
+  breed:
+    image: breed:latest
+    build:
+      context: ./backend/breed
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+    # ports:
+    #   - "8081:8081/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.breed: "Breed web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8081
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  category:
+    image: category:latest
+    build:
+      context: ./backend/category
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+    # ports:
+    #   - "8082:8082/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.category: "category web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8082
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  operation:
+    image: operation:latest
+    build:
+      context: ./backend/operation
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+    # ports:
+    #   - "8083:8083/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.operation: "operation web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8083
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  supplier:
+    image: supplier:latest
+    build:
+      context: ./backend/supplier
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+    # ports:
+    #   - "8084:8084/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.supplier: "supplier web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8084
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  troop:
+    image: troop:latest
+    build:
+      context: ./backend/troop
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+    # ports:
+    #   - "8085:8085/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.troop: "troop web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8085
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  grassland:
+    image: grassland:latest
+    build:
+      context: ./backend/grassland
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - breed
+    # ports:
+    #   - "8086:8086/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.grassland: "grassland web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8086
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  corral:
+    image: corral:latest
+    build:
+      context: ./backend/corral
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+    # ports:
+    #   - "8087:8087/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.corral: "corral web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8087
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  animal:
+    image: animal:latest
+    build:
+      context: ./backend/animal
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - breed
+      - category
+      - supplier
+    # ports:
+    #   - "8088:8088/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.animal: "animal web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8088
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  animal_location:
+    image: animal_location:latest
+    build:
+      context: ./backend/animal_location
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - animal
+      - corral
+      - operation
+    # ports:
+    #   - "8089:8089/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.animal_location: "animal_location web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8089
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  grazing:
+    image: grazing:latest
+    build:
+      context: ./backend/grazing
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - grassland
+      - animal
+      - corral
+    # ports:
+    #   - "8090:8090/tcp"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.grazing: "grazing web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8090
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  labor:
+    image: labor:latest
+    build:
+      context: ./backend/labor
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - corral
+      - grassland
+      - animal
+      - operation
+    # ports:
+    #   - "8091:8091/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.labor: "labor web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8091
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  troop_animal:
+    image: troop_animal:latest
+    build:
+      context: ./backend/troop_animal
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - troop
+      - animal
+    # ports:
+    #   - "8092:8092/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.troop_animal: "troop_animal web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8092
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  troop_location:
+    image: troop_location:latest
+    build:
+      context: ./backend/troop_location
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - corral
+      - troop
+      - grassland
+    # ports:
+    #   - "8092:8092/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.troop_location: "troop_location web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8093
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  weight:
+    image: weight:latest
+    build:
+      context: ./backend/weight
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - animal
+    # ports:
+    #   - "8093:8093/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.weight: "weight web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8094
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+  breteado:
+    image: breteado:latest
+    build:
+      context: ./backend/breteado
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+      - company
+      - animal
+      - operation
+    # ports:
+    #   - "8094:8094/tcp"
+    # network_mode: "host"
+    # networks:
+    #   - back-tier
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        com.agil.ganaderia.breteado: "breteado web service. Agil Ganaderia"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+    environment:
+      - DBHOST=172.18.0.2
+      - JWTSECRET=midffgpDFDF.ggficvxjk
+      - DEVMODE=false
+      - SALTROUND=10
+      - DBNAME=ganaderia
+      - DBUSR=root
+      - SRVPORT=8094
+      - INDEX=/app/public/index.html
+      - PUBLIC=/app/public
+
+
+  mysql:
+    platform: linux/x86_64
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'ganaderia'
+      MYSQL_ROOT_PASSWORD: '123'
+    # networks:
+    #   - back-tier
+    build: 
+      context: ./bd
+      dockerfile: dockerfile
+    # ports:
+    #   - '3306:6666'
+    # expose:
+    #   - '6666'
+    # command: --sql-mode='(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))'
+    volumes:
+      - db:/var/lib/mysql
+
+
+  # backend:
+  #   image: awesome/backend
+  #   volumes:
+  #     - type: volume
+  #       source: db-data
+  #       target: /data
+  #       volume:
+  #         nocopy: true
+  #     - type: bind
+  #       source: /var/run/postgres/postgres.sock
+  #       target: /var/run/postgres/postgres.sock
+  #   networks:
+  #     back-tier:
+  #       aliases:
+  #         - database
+  #     admin:
+  #       aliases:
+  #         - mysql
+
+  # networks:
+  #   front-tier:
+  #   back-tier:
+
+  # secrets:
+  #   server-certificate:
+  #     file: ./server.cert
+
+  # configs:
+  #   httpd-config:
+  #     external: true
+
+
+  
